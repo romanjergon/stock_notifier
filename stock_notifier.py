@@ -61,10 +61,10 @@ def send_notif_mail(
 
 def main():
     TICKER = "VTI"  # Vanguard total stock market
-    api_key_alpha = os.environ.get("KEY_APLHAVANTAGE")
-    notification_mailbox = os.environ.get("NOTIFICATION_MAILBOX")
-    mail_password = os.environ.get("MAIL_PASSWORD")
-    personal_mailbox = os.environ.get("PERSONAL_MAILBOX")
+    api_key_alpha = os.environ["KEY_APLHAVANTAGE"]
+    notification_mailbox = os.environ["NOTIFICATION_MAILBOX"]
+    mail_password = os.environ["MAIL_PASSWORD"]
+    personal_mailbox = os.environ["PERSONAL_MAILBOX"]
 
     daily_values = get_ticker_data(TICKER, api_key=api_key_alpha)
     one_day_difference_prc = calculate_difference_prc(daily_values, 1)

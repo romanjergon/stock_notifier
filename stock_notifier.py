@@ -74,7 +74,7 @@ def main():
     if one_day_difference_prc < -1:
         send_notif_mail(
             "Market is going down 1 day info",
-            f"{TICKER} is down by at least 1 percent since prev day.",
+            f"{TICKER} is down by {one_day_difference_prc} percent since prev day.",
             notification_mailbox=notification_mailbox,
             mail_password=mail_password,
             personal_mailbox=personal_mailbox,
@@ -83,7 +83,7 @@ def main():
     if week_difference_prc < -4:
         send_notif_mail(
             "Market is going down week info",
-            f"{TICKER} is down by at least 4 percent since prev week.",
+            f"{TICKER} is down by {week_difference_prc} percent since prev week.",
             notification_mailbox=notification_mailbox,
             mail_password=mail_password,
             personal_mailbox=personal_mailbox,

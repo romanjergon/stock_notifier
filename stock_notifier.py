@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def get_ticker_daily_close(ticker: str):
+def get_ticker_daily_close(ticker: str) -> list[float]:
     print(ticker)
     yfinance_ticker = yfinance.Ticker(ticker)
     ticker_history = yfinance_ticker.history(period="1mo", interval="1d")

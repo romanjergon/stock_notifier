@@ -8,6 +8,7 @@ authors = ["Roman"]
 python = "^3.9"
 requests = "^2.26.0"
 python-dotenv = "^0.19.1"
+yfinance = "^0.1.68"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.910"

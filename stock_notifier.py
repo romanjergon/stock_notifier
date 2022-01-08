@@ -1,39 +1,28 @@
 import os
 import smtplib
 
-import requests
+import yfinance
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
-def get_ticker_data(ticker: str, api_key: str):
-    """Get data from alphavantage for given ticker."""
-    url = "https://www.alphavantage.co/query"
-    params = {
-        "function": "TIME_SERIES_DAILY_ADJUSTED",
-        "symbol": ticker,
-        "apikey": api_key,
-    }
-    r = requests.get(url, params=params)
-    r.raise_for_status()
-    data = r.json()["Time Series (Daily)"]
-    daily_values = [value for (_, value) in data.items()]
-    return daily_values
+def get_ticker_daily_close(ticker: str) -> list[float]:
+    yfinance_ticker = yfinance.Ticker(ticker)
+    ticker_history = yfinance_ticker.history(period="1mo", interval="1d")
+    return list(reversed(list(ticker_history["Close"])))
 
 
-def calculate_difference_prc(daily_values: list, no_days: int):
+def calculate_difference_prc(daily_values: list, no_days: int) -> int:
     """
     Calculate the percentage of closing price difference between last trading day
     and trading day no_days ago.
     """
-    last_trading_values = daily_values[0]
-    past_day_values = daily_values[no_days]
-    last_trading_close = last_trading_values["5. adjusted close"]
-    past_day_close = past_day_values["5. adjusted close"]
+    last_trading_close: float = daily_values[0]
+    past_day_close: float = daily_values[no_days]
 
-    difference = float(last_trading_close) - float(past_day_close)
-    diff_percent = round((difference / float(last_trading_close)) * 100)
+    difference: float = float(last_trading_close) - float(past_day_close)
+    diff_percent: int = round((difference / float(last_trading_close)) * 100)
 
     print(f"Calculation for time period of {no_days} days")
     print(f"Last trading day close {last_trading_close}")
@@ -61,14 +50,13 @@ def send_notif_mail(
 
 def main():
     TICKER = "VTI"  # Vanguard total stock market
-    api_key_alpha = os.environ["KEY_APLHAVANTAGE"]
     notification_mailbox = os.environ["NOTIFICATION_MAILBOX"]
     mail_password = os.environ["MAIL_PASSWORD"]
     personal_mailbox = os.environ["PERSONAL_MAILBOX"]
 
-    daily_values = get_ticker_data(TICKER, api_key=api_key_alpha)
-    one_day_difference_prc = calculate_difference_prc(daily_values, 1)
-    week_difference_prc = calculate_difference_prc(daily_values, 7)
+    daily_values: list(float) = get_ticker_daily_close(TICKER)
+    one_day_difference_prc: int = calculate_difference_prc(daily_values, 1)
+    week_difference_prc: int = calculate_difference_prc(daily_values, 7)
 
     # notify
     if one_day_difference_prc < -1:

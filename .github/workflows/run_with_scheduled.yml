@@ -17,6 +17,7 @@ jobs:
         python -m pip install python-dotenv
         python -m pip install yfinance
     - name: run the script
+    - uses: actions/setup-python@v2
       with:
         python-version: '3.10'
       run: |

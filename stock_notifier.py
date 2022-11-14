@@ -59,7 +59,7 @@ def main():
     week_difference_prc: int = calculate_difference_prc(daily_values, 7)
 
     # notify
-    if one_day_difference_prc < -1:
+    if one_day_difference_prc < -0.5:
         send_notif_mail(
             "Market is going down 1 day info",
             f"{TICKER} is down by {one_day_difference_prc} percent since prev day.",
@@ -68,7 +68,7 @@ def main():
             personal_mailbox=personal_mailbox,
         )
 
-    if week_difference_prc < -4:
+    if week_difference_prc < -2:
         send_notif_mail(
             "Market is going down week info",
             f"{TICKER} is down by {week_difference_prc} percent since prev week.",
